@@ -28,6 +28,8 @@ namespace Assigment_DB_V_48
                 if (selectFirstName != null)
                 {
                     var data = SakilaDataHandler.ActorGetFilm(selectFirstName, selectLastName);
+                    if (data == null)
+                        continue;
                     ListFilms(data);
                     Console.WriteLine("Press Enter to Continue");
                     Console.ReadLine();
@@ -37,17 +39,24 @@ namespace Assigment_DB_V_48
 
         public void ListFilms(SqlDataReader data)
         {
-            var connection = Connection.GetConnection();
-            connection.Open();
-            if (data.HasRows)
+            try
             {
-                Console.WriteLine("Firstname-Lastname-Films");
-                while (data.Read())
+                var connection = Connection.GetConnection();
+                connection.Open();
+                if (data.HasRows)
                 {
-                    Console.WriteLine($"{data[0]} {data[1]}-{data[2]}");
+                    Console.WriteLine("Firstname-Lastname-Films");
+                    while (data.Read())
+                    {
+                        Console.WriteLine($"{data[0]} {data[1]}-{data[2]}");
+                    }
                 }
+                connection.Close();
             }
-            connection.Close();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "Code 2");
+            }
         }
     }
 }
